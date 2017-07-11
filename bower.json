@@ -1,0 +1,24 @@
+{
+  "name": "LibreriaDemo",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "Matteo Vaccari"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/vacyuniv/LibreriaDemo",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-animate": "^1.6.5",
+    "jquery": "^3.2.1",
+    "angular-route": "^1.6.5",
+    "angular": "^1.6.5"
+  }
+}
