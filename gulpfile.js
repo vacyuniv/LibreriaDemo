@@ -29,7 +29,8 @@ var paths = {
     ]
   },
   appJs: [ "./app/**/*.js" ],
-  appHtml: [ "./app/**/*.html"],
+  appHtml: [ "./app/**/*.html", "!./app/index.html"],
+  appHtmlIndex: ["./app/index.html"],
   appCss: [ "./app/**/*.css"]
 
 };
@@ -53,6 +54,21 @@ gulp.task('buildJs:lib', function(){
 gulp.task('buildJs', gulp.parallel('buildJs:app', 'buildJs:lib'));
 
 
+// ---------------------------------------------------------------------------------------------------------------
+// Html/Template Task
+// ---------------------------------------------------------------------------------------------------------------
+// --- Index Task: just move --------------------------------------------------------------
+gulp.task('buildHtml:index', function(){
+  return gulp.src(paths.appHtmlIndex)
+    .pipe( gulp.dest('./dist'));
+});
+// --- All others Task: just move ---------------------------------------------------------
+gulp.task('buildHtml:views', function(){
+  return gulp.src(paths.appHtml)
+    .pipe( gulp.dest('./dist/view'));
+});
+// >>> MAIN HTML TASK <<<
+gulp.task("buildHtml", gulp.series('buildHtml:index', 'buildHtml:views'));
 
 // ---------------------------------------------------------------------------------------------------------------
 // Clean Task: remove directory dist
@@ -67,4 +83,4 @@ gulp.task('clean', function() {
 });
 
 
-gulp.task('default', gulp.series('clean', gulp.parallel('buildJs') ) );
+gulp.task('default', gulp.series('clean', gulp.parallel('buildJs', 'buildHtml') ) );
