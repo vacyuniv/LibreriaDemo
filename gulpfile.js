@@ -9,11 +9,11 @@ var rimraf    = require('gulp-rimraf');
 // ----------------------------------------------------------------------------------------
 // PAths
 // ----------------------------------------------------------------------------------------
-var paths = [
+var paths = {
   libJs: {
     source: [
       './bower_components/angular/angular.js',
-      './bower_components/angular/angular-animate.js',
+      './bower_components/angular-animate/angular-animate.js',
       './bower_components/angular-route/angular-route.js',
       './bower_components/angular-ui-router/release/angular-ui-router.js',
       './bower_components/lovefield/dist/lovefield.js',
@@ -32,7 +32,7 @@ var paths = [
   appHtml: [ "./app/**/*.html"],
   appCss: [ "./app/**/*.css"]
 
-];
+};
 
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -54,9 +54,9 @@ gulp.task('buildJs', gulp.parallel('buildJs:app', 'buildJs:lib'));
 
 
 
-# ---------------------------------------------------------------------------------------------------------------
-# Clean Task: remove directory dist
-# ---------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------
+// Clean Task: remove directory dist
+// ---------------------------------------------------------------------------------------------------------------
 gulp.task('clean', function() {
   var rimrafOptions = {
     read: false,
