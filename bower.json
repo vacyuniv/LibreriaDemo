@@ -20,6 +20,7 @@
     "jquery": "^3.2.1",
     "angular-route": "^1.6.5",
     "angular": "^1.6.5",
-    "lovefield": "^2.1.12"
+    "lovefield": "^2.1.12",
+    "angular-ui-router": "^1.0.5"
   }
 }
