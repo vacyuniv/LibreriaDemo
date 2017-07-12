@@ -4,6 +4,7 @@ var gulp      = require('gulp');
 var gutil     = require('gulp-util');
 var concat    = require('gulp-concat');
 var rimraf    = require('gulp-rimraf');
+var templateCache = require('gulp-angular-templatecache');
 
 
 // ----------------------------------------------------------------------------------------
@@ -65,6 +66,7 @@ gulp.task('buildHtml:index', function(){
 // --- All others Task: just move ---------------------------------------------------------
 gulp.task('buildHtml:views', function(){
   return gulp.src(paths.appHtml)
+    .pipe( templateCache('templates.js'))
     .pipe( gulp.dest('./dist/view'));
 });
 // >>> MAIN HTML TASK <<<
