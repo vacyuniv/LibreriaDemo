@@ -1,5 +1,7 @@
 // Module definition
-var loginModule = angular.module('loginModule', []);
+angular.module('loginModule', [
+  'databaseManager'
+]);
 
 // Module configuration
 function LoginConfig($stateProvider){
@@ -8,7 +10,7 @@ function LoginConfig($stateProvider){
     url: '/login',
     views: {
       'index': {
-        templateUrl: 'login.view.html',
+        templateUrl: 'components/login/login-view.html',
         controller: 'loginController'
       }
     }
@@ -18,9 +20,11 @@ function LoginConfig($stateProvider){
 
 
 // Controller definition
-function LoginController($scope, $rootScope, $filter, $log, AuthData, $state) {
+function LoginController($scope, $rootScope, $filter, $log, AuthUserData, $state) {
 
   $scope.formLogin = {};
+  $scope.formLogin.username = 'try';
+  $scope.formLogin.password = 'me';
 
   // Reset the form, used for init too
   $scope.resetForm = function(){
@@ -31,7 +35,7 @@ function LoginController($scope, $rootScope, $filter, $log, AuthData, $state) {
 
   $scope.doLogin = function(){
     $scope.waitLogin = true;
-    AuthData.login($scope.formLogin.username, $scope.formLogin.password)
+    AuthUserData.login($scope.formLogin.username, $scope.formLogin.password)
       .then(function(result){
         if (result){
           $state.go('');
@@ -45,6 +49,6 @@ function LoginController($scope, $rootScope, $filter, $log, AuthData, $state) {
 
 }
 
-loginModule
+angular.module('loginModule')
   .config(['$stateProvider', LoginConfig])
-  .controller('loginController', ['$scope', '$rootScope', 'AuthData', '$state', LoginController]);
+  .controller('loginController', ['$scope', '$rootScope','$filter','$log', 'AuthUserData', '$state', LoginController]);

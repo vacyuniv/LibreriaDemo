@@ -71,7 +71,7 @@ gulp.task('buildHtml:index', function(){
 // --- All others Task: just move ---------------------------------------------------------
 gulp.task('buildHtml:views', function(){
   return gulp.src(paths.appHtml)
-    .pipe( templateCache('templates.js'))
+    .pipe( templateCache('templates.js', {standalone: true}))
     .pipe( gulp.dest('./dist/view'));
 });
 // >>> MAIN HTML TASK <<<
@@ -81,7 +81,8 @@ gulp.task("buildHtml", gulp.series('buildHtml:index', 'buildHtml:views'));
 // Css/Template Task
 // ---------------------------------------------------------------------------------------------------------------
 gulp.task('buildCss:lib', function(){
-  return gulp.src(paths.libCss)
+  return gulp.src(paths.libCss.source)
+    .pipe( concat('lib.css'))
     .pipe( gulp.dest('./dist/css'));
 });
 // >>> MAIN CSS TASK
@@ -127,32 +128,3 @@ gulp.task('connectDist', function () {
 
 
 gulp.task('default', gulp.series('clean', gulp.parallel('buildJs', 'buildHtml', 'buildCss'), gulp.parallel('watch', 'connectDist') ) );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

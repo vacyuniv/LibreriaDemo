@@ -1,9 +1,9 @@
 // Factory definition
-function AuthData($log, $q, dbService){
+function AuthUserData($log, $q, DbManager){
 
-  var username = undefined;
+  /*var username = undefined;
   var password = undefined;
-  var userId   = undefined;
+  var userId   = undefined;*/
 
   return {
 
@@ -12,7 +12,7 @@ function AuthData($log, $q, dbService){
       this.username = undefined;
       this.password = undefined;
       return true;
-    }
+    },
 
 
     /** Authenticate the user, simply checking on the db with dbServie
@@ -24,7 +24,7 @@ function AuthData($log, $q, dbService){
       this.password = password;
 
       // Check data in DB with lovefield service
-      return dbService.authenticate(this.username, this.password)
+      return DbManager.authenticate(this.username, this.password)
         .then(function(resolve){
           // manage the correctness and return a result
           return resolve;
@@ -35,4 +35,4 @@ function AuthData($log, $q, dbService){
 
 }
 
-loginModule.factory('AuthData', [ '$log', '$q', 'dbService', AuthData]);
+angular.module('loginModule').factory('AuthUserData', [ '$log', '$q', 'DbManager', AuthUserData]);

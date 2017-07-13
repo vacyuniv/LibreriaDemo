@@ -1,19 +1,18 @@
-'use strict';
-
 // Module definition for the app, including the submodules
-var libreriaDemoApp = angular.module('libreriaDemo', [
+angular.module('libreriaDemoApp', [
   'ngAnimate',
   'ngRoute',
-  'core',
+  'ui.router',
   'loginModule',
-  'templates'
+  'templates',
+  'databaseManager'
 ]);
 
 
 // App main controller
-controllerLibreriaDemo = function(dbManager, $log, $scope, $rootScope, $filter, AuthData){
+function controllerLibreriaDemo(dbManager, $log, $scope, $rootScope, $filter, authUserData){
 
-
+  $scope.title = "pippo";
 
 
 
@@ -22,9 +21,9 @@ controllerLibreriaDemo = function(dbManager, $log, $scope, $rootScope, $filter, 
 // Application configuration
 // TODO: capire come impostare un redirect nel caso in cui l'utente non sia autenticato
 //        vedere coi cookie e/o con un token autorizzativo
-configLibreriaDemo = function($stateProvider, $urlRouterProvider, $locationProvider, $logProvider){
+function configLibreriaDemo($stateProvider, $urlRouterProvider, $locationProvider, $logProvider){
 
-  $logProviderd.debugEnabled(true);
+  $logProvider.debugEnabled(true);
   $urlRouterProvider.otherwise('/login');
 
   /*$stateProvider.state('neworder', {
@@ -47,7 +46,12 @@ configLibreriaDemo = function($stateProvider, $urlRouterProvider, $locationProvi
 
 }
 
+function runLibreriaDemo(DbManager){
+  DbManager.initDb();
+}
+
 // DI
-libreriaDemoApp
+angular.module('libreriaDemoApp')
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$logProvider', configLibreriaDemo])
-  .controller(['dbManager', '$log', '$scope', '$rootScope', '$filter', 'AuthData', controllerLibreriaDemo]);
+  .run(['DbManager', runLibreriaDemo])
+  .controller(['dbManager', '$log', '$scope', '$rootScope', '$filter', 'authUserData', controllerLibreriaDemo]);

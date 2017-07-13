@@ -21,6 +21,7 @@
     "angular-route": "^1.6.5",
     "angular": "^1.6.5",
     "lovefield": "^2.1.12",
-    "angular-ui-router": "^1.0.5"
+    "angular-ui-router": "^1.0.5",
+    "bootstrap": "^3.3.7"
   }
 }
