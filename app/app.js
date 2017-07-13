@@ -10,7 +10,7 @@ var libreriaDemoApp = angular.module('libreriaDemo', [
 ]);
 
 
-
+// App main controller
 controllerLibreriaDemo = function(dbManager, $log, $scope, $rootScope, $filter, AuthData){
 
 
@@ -20,12 +20,14 @@ controllerLibreriaDemo = function(dbManager, $log, $scope, $rootScope, $filter, 
 }
 
 // Application configuration
+// TODO: capire come impostare un redirect nel caso in cui l'utente non sia autenticato
+//        vedere coi cookie e/o con un token autorizzativo
 configLibreriaDemo = function($stateProvider, $urlRouterProvider, $locationProvider, $logProvider){
 
   $logProviderd.debugEnabled(true);
   $urlRouterProvider.otherwise('/login');
 
-  $stateProvider.state('neworder', {
+  /*$stateProvider.state('neworder', {
     abstract: true,
     url: '/neworder',
     params: {
@@ -41,7 +43,7 @@ configLibreriaDemo = function($stateProvider, $urlRouterProvider, $locationProvi
     data: {
       ncyBreadcrumbLabel: "{{ 'index.NEW_ORDER' | translate }}"
     }
-  });
+  });*/
 
 }
 

@@ -1,0 +1,29 @@
+<div class="row">
+
+  <div class="col-xs-12">
+
+    <form class="form" ng-form="loginForm">
+
+      <!-- Username -->
+      <div class="form-group">
+        <label class="control-label">Username</label>
+        <input class="form-control" type="text" ng-model="formLogin.username" required />
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label class="control-label">Password</label>
+        <input class="form-control" type="text" ng-model="formLogin.password" required />
+      </div>
+
+      <!-- Buttons -->
+      <div class="form-control">
+        <input type="button" value="Login" ng-click="doLogin()" />
+
+        <input type="button" value="Reset" ng-click="resetForm()" />
+
+      </div>
+    </form>
+
+  </div>
+</div>
