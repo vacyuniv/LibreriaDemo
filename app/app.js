@@ -5,5 +5,6 @@ var libreriaDemoApp = angular.module('libreriaDemo', [
   'ngAnimate',
   'ngRoute',
   'core',
-  'loginModule'
+  'loginModule',
+  'templates'
 ]);
