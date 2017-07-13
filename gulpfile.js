@@ -5,7 +5,7 @@ var gutil     = require('gulp-util');
 var concat    = require('gulp-concat');
 var rimraf    = require('gulp-rimraf');
 var templateCache = require('gulp-angular-templatecache');
-
+var connect   = require('gulp-connect');
 
 // ----------------------------------------------------------------------------------------
 // PAths
@@ -27,6 +27,11 @@ var paths = {
       './bower_components/angular-ui-router/release/angular-ui-router.min.js',
       './bower_components/lovefield/dist/lovefield.min.js',
       './bower_components/jquery/dist/jquery.min.js'
+    ]
+  },
+  libCss: {
+    source: [
+      './bower_components/**/*.css'
     ]
   },
   appJs: [ "./app/**/*.js" ],
@@ -73,6 +78,17 @@ gulp.task('buildHtml:views', function(){
 gulp.task("buildHtml", gulp.series('buildHtml:index', 'buildHtml:views'));
 
 // ---------------------------------------------------------------------------------------------------------------
+// Css/Template Task
+// ---------------------------------------------------------------------------------------------------------------
+gulp.task('buildCss:lib', function(){
+  return gulp.src(paths.libCss)
+    .pipe( gulp.dest('./dist/css'));
+});
+// >>> MAIN CSS TASK
+gulp.task('buildCss', gulp.series('buildCss:lib'));
+
+
+// ---------------------------------------------------------------------------------------------------------------
 // Clean Task: remove directory dist
 // ---------------------------------------------------------------------------------------------------------------
 gulp.task('clean', function() {
@@ -84,5 +100,59 @@ gulp.task('clean', function() {
     .pipe( rimraf(rimrafOptions) );
 });
 
+// ---------------------------------------------------------------------------------------------------------------
+// Watch Task: run again some tasks when the files change, and reload server
+// ---------------------------------------------------------------------------------------------------------------
+gulp.task('watch', function() {
+  var cssPromise, htmlPromise, jsPromise, promiseList;
+  promiseList = [];
+  jsPromise = gulp.watch(paths.appJs, gulp.parallel('buildJs'));
+  htmlPromise = gulp.watch(paths.appHtml, gulp.parallel('buildHtml'));
+  cssPromise = gulp.watch(['./app/**/*.less', './app/**/*.css'], gulp.parallel('buildCss'));
+  promiseList.push(jsPromise);
+  promiseList.push(htmlPromise);
+  promiseList.push(cssPromise);
+  return Promise.all(promiseList);
+});
 
-gulp.task('default', gulp.series('clean', gulp.parallel('buildJs', 'buildHtml') ) );
+// Connect
+gulp.task('connectDist', function () {
+  connect.server({
+    name: 'Libreria Demo',
+    root: 'dist',
+    port: 8000,
+    livereload: true
+  });
+});
+
+
+gulp.task('default', gulp.series('clean', gulp.parallel('buildJs', 'buildHtml', 'buildCss'), gulp.parallel('watch', 'connectDist') ) );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

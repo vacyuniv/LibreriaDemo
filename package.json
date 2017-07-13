@@ -13,6 +13,7 @@
     "bower": "^1.8.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-concat": "^2.6.1",
+    "gulp-connect": "^5.0.0",
     "gulp-rimraf": "^0.2.1",
     "gulp-util": "^3.0.8",
     "jQuery": "^1.7.4"
