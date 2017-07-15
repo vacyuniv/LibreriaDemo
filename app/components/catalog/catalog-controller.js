@@ -20,6 +20,11 @@ function CatalogConfig($stateProvider){
 // Controller definition
 function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $state, CatalogService) {
 
+  // GTFO when not logged
+  if ( !AuthUserData.isLogged ){
+    $state.go('login');
+  }
+
   $scope.totalAuthors = 0;
   $scope.currentPage  = 1;
 
@@ -45,26 +50,36 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
   $scope.catalog = {
     Author : [],
     Book   : []
-  }
-  $scope.authorBooksExpanded = [];
+  };
   $scope.waitCatalog = true;
 
-  $scope.showAuthorBooks = function(author){
-    $scope.authorBooksExpanded[author.id] = !$scope.authorBooksExpanded[author.id];
-  }
-
-  $scope.getCatalogList = function(){
-    CatalogService.getCatalog()
+  // Retrieve the catalog from service
+  $scope.getCatalogList = function(filterForm){
+    var bookTitle = undefined;
+    var bookYear  = undefined;
+    if (filterForm){
+      if (filterForm.title) { bookTitle = filterForm.bookTitle; }
+      if (filterForm.year)  { bookYear = filterForm.bookYear; }
+    }
+    CatalogService.getCatalog(bookTitle, bookYear)
       .then(function(catalog){
         $scope.catalog = catalog;
         $scope.totalAuthors = catalog.Author.length;
         $scope.waitCatalog = false;
       });
-  }
+  };
   $scope.getCatalogList();
   $scope.booksByAuthor = function(authorId){
     return _.where($scope.catalog.Book, {'authorId': authorId});
+  };
+
+  // --- Expand/collapse utilities --------------------------------------------------------
+  $scope.authorBooksExpanded = [];
+  $scope.showAuthorBooks = function(author){
+    $scope.authorBooksExpanded[author.id] = !$scope.authorBooksExpanded[author.id];
   }
+
+  // --- Sorting utilities ----------------------------------------------------------------
   $scope.authorSortField        = 'name';
   $scope.authorSortFieldReverse = [];
   $scope.bookSortField        = [];

@@ -4,10 +4,10 @@ function CatalogService($log, $q, DbManager){
   /**
   * Get a list of authors, containing each one their books.
   */
-  this.getCatalog = function(){
+  this.getCatalog = function(bookTitle, bookYear){
     var defer = $q.defer();
     // get the author list based on
-    DbManager.getCatalog()
+    DbManager.getCatalog(bookTitle, bookYear)
       .then(function(result){
         // Aggregate the fields so that i have an object with 2 lists, Author and Book
         console.log(result);

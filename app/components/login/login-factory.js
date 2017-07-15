@@ -1,5 +1,5 @@
 // Factory definition
-function AuthUserData($log, $q, DbManager){
+function AuthUserData($log, $q, DbManager, $cookies){
 
   /*var username = undefined;
   var password = undefined;
@@ -30,13 +30,24 @@ function AuthUserData($log, $q, DbManager){
       return DbManager.authenticate(this.username, this.password)
         .then(function(resolve){
           isLogged = true;
+          $cookies.putObject('libreriaDemoAppUserSession', {username: this.username});
           // manage the correctness and return a result
           return resolve;
         });
+    },
+
+    hasSession : function(){
+      var cookieObject = $cookies.getObject('libreriaDemoAppUserSession');
+      if (cookieObject && cookieObject.username){
+        isLogged = true;
+        this.username = cookieObject.username;
+        return true;
+      }
+      return false;
     }
 
   };
 
 }
 
-angular.module('loginModule').factory('AuthUserData', [ '$log', '$q', 'DbManager', AuthUserData]);
+angular.module('loginModule').factory('AuthUserData', [ '$log', '$q', 'DbManager', '$cookies' , AuthUserData]);

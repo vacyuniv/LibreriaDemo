@@ -188,22 +188,39 @@ function DbManager($log){
 
   /**
   * Retrieve the catalog from DB
-  * @return a list of authors
+  * @return a list of records of both Author and Book joined, filtered by specified fields.
   */
-  this.getCatalog = function(){
+  this.getCatalog = function(bookTitle, bookYear){
 
     var db          = dbReferences.db;
     var authorTable = dbReferences.authorTable;
     var bookTable   = dbReferences.bookTable;
 
-    var selectedFields = [ authorTable.id, authorTable.pseudonym, authorTable.name, bookTable.title, bookTable.year, bookTable.basePrice];
+    // Add wildcards when not given the records
+    if (!bookTitle) {
+      bookTitle = new RegExp('.*');
+    } else {
+      bookTitle = new RegExp('*'+bookTitle+'*');
+    }
+    if (!bookYear){
+      bookYear = new RegExp('.*');
+    } else {
+      bookYear = new RegExp('*' + bookYear + '*');
+    }
 
-    return db.select(authorTable.id, authorTable.pseudonym, authorTable.name, bookTable.isbn, bookTable.title, bookTable.year, bookTable.basePrice, bookTable.authorId)
+    var maquery = db.select(authorTable.id, authorTable.pseudonym, authorTable.name, bookTable.isbn, bookTable.title, bookTable.year, bookTable.basePrice, bookTable.authorId)
       .from(authorTable, bookTable)
-      .where(bookTable.authorId.eq(authorTable.id))
+      .where( lf.op.and(
+          bookTable.authorId.eq(authorTable.id),
+          bookTable.title.match(bookTitle),
+          bookTable.year.match(bookYear)
+        )
+      );
       //.innerJoin(bookTable, authorTable.id.eq(bookTable.authorId))
       //.groupBy(authorTable.id)
-      .exec();
+      console.log(maquery.explain());
+      //maquery.bind([bookTitle, bookYear]);
+      return maquery.exec();
   }
 
 

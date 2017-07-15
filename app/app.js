@@ -2,6 +2,7 @@
 angular.module('libreriaDemoApp', [
   'ngAnimate',
   'ngRoute',
+  'ngCookies',
   'ui.router',
   'loginModule',
   'templates',
@@ -13,8 +14,7 @@ angular.module('libreriaDemoApp', [
 // App main controller
 function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, $filter, AuthUserData, $state){
 
-  $scope.title = "pippo";
-  if (!AuthUserData.isLogged){
+  if ( !AuthUserData.hasSession() ){
     $state.go('login');
   }
 }
@@ -27,27 +27,9 @@ function configLibreriaDemo($stateProvider, $urlRouterProvider, $locationProvide
   $logProvider.debugEnabled(true);
   $urlRouterProvider.otherwise('/login');
 
-  /*$stateProvider.state('neworder', {
-    abstract: true,
-    url: '/neworder',
-    params: {
-      slide: {},
-      order: {}
-    },
-    views: {
-      'index': {
-        templateUrl: 'components/neworder/neworder.html',
-        controller: 'newOrderDataController'
-      }
-    },
-    data: {
-      ncyBreadcrumbLabel: "{{ 'index.NEW_ORDER' | translate }}"
-    }
-  });*/
-
 }
 
-function runLibreriaDemo($log, DbManager){
+function runLibreriaDemo($log, DbManager, AuthUserData){
   $log.debug('Running phase');
   DbManager.initDb();
 }
@@ -55,5 +37,5 @@ function runLibreriaDemo($log, DbManager){
 // DI
 angular.module('libreriaDemoApp')
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$logProvider', configLibreriaDemo])
-  .run(['$log', 'DbManager', runLibreriaDemo])
+  .run(['$log', 'DbManager', 'AuthUserData', runLibreriaDemo])
   .controller('controllerLibreriaDemo',['DbManager', '$log', '$scope', '$rootScope', '$filter', 'AuthUserData', '$state', controllerLibreriaDemo]);
