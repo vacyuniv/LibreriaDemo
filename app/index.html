@@ -13,12 +13,20 @@
 
   <body ng-controller="controllerLibreriaDemo">
 
-    <h1>Libreria Cagnoni</h1>
-
-    <div class="view-container col-xs-12">
-      <div ui-view="index"></div>
+    <div class="sk-folding-cube" ng-if="waitInit">
+      <div class="sk-cube1 sk-cube"></div>
+      <div class="sk-cube2 sk-cube"></div>
+      <div class="sk-cube4 sk-cube"></div>
+      <div class="sk-cube3 sk-cube"></div>
     </div>
 
+    <div ng-show="!waitInit">
+      <h1>Libreria Demo GetConnected</h1>
+
+      <div class="view-container col-xs-12">
+        <div ui-view="index"></div>
+      </div>
+    </div>
 
     <script src="js/lib.js"></script>
     <script src="view/templates.js"></script>

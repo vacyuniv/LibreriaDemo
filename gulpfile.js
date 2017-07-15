@@ -41,7 +41,7 @@ var paths = {
   appJs: [ "./app/**/*.js" ],
   appHtml: [ "./app/**/*.html", "!./app/index.html"],
   appHtmlIndex: ["./app/index.html"],
-  appCss: [ "./app/**/*.css"]
+  appCss: [ "./app/assets/css/*.css"]
 
 };
 
@@ -89,8 +89,13 @@ gulp.task('buildCss:lib', function(){
     .pipe( concat('lib.css'))
     .pipe( gulp.dest('./dist/css'));
 });
+gulp.task('buildCss:app', function(){
+  return gulp.src(paths.libCss.source)
+    .pipe( concat('app.css'))
+    .pipe( gulp.dest('./dist/css'));
+});
 // >>> MAIN CSS TASK
-gulp.task('buildCss', gulp.series('buildCss:lib'));
+gulp.task('buildCss', gulp.series('buildCss:lib', 'buildCss:app'));
 
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -113,7 +118,7 @@ gulp.task('watch', function() {
   promiseList = [];
   jsPromise = gulp.watch(paths.appJs, gulp.parallel('buildJs'));
   htmlPromise = gulp.watch(paths.appHtml, gulp.parallel('buildHtml'));
-  cssPromise = gulp.watch(['./app/**/*.less', './app/**/*.css'], gulp.parallel('buildCss'));
+  cssPromise = gulp.watch(paths.appCss, gulp.parallel('buildCss'));
   promiseList.push(jsPromise);
   promiseList.push(htmlPromise);
   promiseList.push(cssPromise);

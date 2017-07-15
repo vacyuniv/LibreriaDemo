@@ -7,13 +7,19 @@ function AuthUserData($log, $q, DbManager, $cookies){
 
   return {
 
-    isLogged : false,
+    userData: {
+      isLogged : false,
+      username : '',
+      userId   : ''
+    },
+
 
     logout : function(){
-      this.userId = undefined;
-      this.username = undefined;
-      this.password = undefined;
-      isLogged = false;
+      /*userData.userId = undefined;
+      userData.username = undefined;
+      userData.password = undefined;
+      userData.isLogged = false;*/
+      $cookies.remove('libreriaDemoAppUserSession');
       return true;
     },
 
@@ -23,14 +29,14 @@ function AuthUserData($log, $q, DbManager, $cookies){
     *   TODO: capire se ha senso mettere il salvataggio nella factory solo prima o solo dopo l'autenticazione.
     */
     login : function(username, password){
-      this.username = username;
-      this.password = password;
 
       // Check data in DB with lovefield service
-      return DbManager.authenticate(this.username, this.password)
+      return DbManager.authenticate(username, password)
         .then(function(resolve){
-          isLogged = true;
-          $cookies.putObject('libreriaDemoAppUserSession', {username: this.username});
+          /*userData.isLogged = true;
+          userData.username = resolve.username;
+          userData.userId   = resolve.id;*/
+          $cookies.putObject('libreriaDemoAppUserSession', resolve);
           // manage the correctness and return a result
           return resolve;
         });
@@ -39,8 +45,9 @@ function AuthUserData($log, $q, DbManager, $cookies){
     hasSession : function(){
       var cookieObject = $cookies.getObject('libreriaDemoAppUserSession');
       if (cookieObject && cookieObject.username){
-        isLogged = true;
-        this.username = cookieObject.username;
+        /*userData.isLogged = true;
+        userData.username = cookieObject.username;
+        userData.userId   = cookieObject.id;*/
         return true;
       }
       return false;

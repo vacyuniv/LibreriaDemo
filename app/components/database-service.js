@@ -7,12 +7,11 @@ function DbManager($log){
 
   // DB Reference
   dbReferences = {}
-  dbReferences.db = undefined;
+  dbReferences.db          = undefined;
   // Table references
   dbReferences.userTable   = undefined;
   dbReferences.authorTable = undefined;
   dbReferences.bookTable   = undefined;
-
 
   /**
   * DB Creation and population. As of now this is mocked, with time get those from a
@@ -52,7 +51,7 @@ function DbManager($log){
       .addPrimaryKey(['isbn']);
 
     // ---- Connection to DB and populate the tables -------
-    schemaBuilder.connect().then(function(db){
+    return schemaBuilder.connect().then(function(db){
 
       // Add references for queries
       dbReferences.db           = db;
@@ -153,7 +152,7 @@ function DbManager($log){
 
     var resultHandler = function(queryResult){
       if (queryResult && queryResult.length == 1) {
-        return queryResult[0].id;
+        return queryResult[0];
       }
       return false;
     }
@@ -202,18 +201,18 @@ function DbManager($log){
     } else {
       bookTitle = new RegExp('*'+bookTitle+'*');
     }
-    if (!bookYear){
-      bookYear = new RegExp('.*');
-    } else {
-      bookYear = new RegExp('*' + bookYear + '*');
+    console.log(bookTitle);
+    if (!bookYear || parseInt(bookYear) == NaN){
+      bookYear = 1870;
     }
+    console.log(bookYear);
 
     var maquery = db.select(authorTable.id, authorTable.pseudonym, authorTable.name, bookTable.isbn, bookTable.title, bookTable.year, bookTable.basePrice, bookTable.authorId)
       .from(authorTable, bookTable)
       .where( lf.op.and(
           bookTable.authorId.eq(authorTable.id),
           bookTable.title.match(bookTitle),
-          bookTable.year.match(bookYear)
+          bookTable.year.gt(bookYear)
         )
       );
       //.innerJoin(bookTable, authorTable.id.eq(bookTable.authorId))
@@ -223,6 +222,10 @@ function DbManager($log){
       return maquery.exec();
   }
 
+
+  if (dbReferences.db == undefined){
+    this.initDb();
+  }
 
 }
 

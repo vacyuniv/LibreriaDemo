@@ -21,7 +21,7 @@ function CatalogConfig($stateProvider){
 function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $state, CatalogService) {
 
   // GTFO when not logged
-  if ( !AuthUserData.isLogged ){
+  if ( !AuthUserData.hasSession() ){
     $state.go('login');
   }
 
@@ -58,8 +58,8 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
     var bookTitle = undefined;
     var bookYear  = undefined;
     if (filterForm){
-      if (filterForm.title) { bookTitle = filterForm.bookTitle; }
-      if (filterForm.year)  { bookYear = filterForm.bookYear; }
+      if (filterForm.title) { bookTitle = filterForm.title; }
+      if (filterForm.year)  { bookYear = filterForm.year; }
     }
     CatalogService.getCatalog(bookTitle, bookYear)
       .then(function(catalog){

@@ -14,9 +14,17 @@ angular.module('libreriaDemoApp', [
 // App main controller
 function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, $filter, AuthUserData, $state){
 
-  if ( !AuthUserData.hasSession() ){
-    $state.go('login');
-  }
+  $scope.waitInit = true;
+  $rootScope._dbInitialization
+    .then(function(resolve){
+      $log.debug('Now going to the correct state');
+      $scope.waitInit = false;
+      if ( !AuthUserData.hasSession() ){
+        $state.go('login');
+      } else {
+        $state.go('catalog');
+      }
+    });
 }
 
 // Application configuration
@@ -29,13 +37,19 @@ function configLibreriaDemo($stateProvider, $urlRouterProvider, $locationProvide
 
 }
 
-function runLibreriaDemo($log, DbManager, AuthUserData){
+function runLibreriaDemo($log, DbManager, AuthUserData, $rootScope, $q){
   $log.debug('Running phase');
-  DbManager.initDb();
+  var bootstrappingPromise = $q.defer();
+  $rootScope._dbInitialization = bootstrappingPromise.promise;
+  DbManager.initDb()
+    .then(function(resolve){
+      $log.debug('DB initializated!');
+      bootstrappingPromise.resolve(true);
+    });
 }
 
 // DI
 angular.module('libreriaDemoApp')
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$logProvider', configLibreriaDemo])
-  .run(['$log', 'DbManager', 'AuthUserData', runLibreriaDemo])
+  .run(['$log', 'DbManager', 'AuthUserData', '$rootScope', '$q', runLibreriaDemo])
   .controller('controllerLibreriaDemo',['DbManager', '$log', '$scope', '$rootScope', '$filter', 'AuthUserData', '$state', controllerLibreriaDemo]);
