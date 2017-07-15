@@ -5,6 +5,14 @@ angular.module('databaseManager', []);
 // Service
 function DbManager($log, $filter){
 
+  // DB Reference
+  dbReferences = {}
+  dbReferences.db = undefined;
+  // Table references
+  dbReferences.userTable_   = undefined;
+  dbReferences.authorTable_ = undefined;
+  dbReferences.bookTable_   = undefined;
+
 
   // DB Creation
   this.initDb = function(){
@@ -27,7 +35,7 @@ function DbManager($log, $filter){
 
     // Schema declaration of the 3 tables
     schemaBuilder.createTable('Book')
-      .addColumn('isbn', lf.Type.INTEGER)
+      .addColumn('isbn', lf.Type.STRING)
       .addColumn('title', lf.Type.STRING)
       .addColumn('description', lf.Type.STRING)
       .addColumn('imageUrl', lf.Type.STRING)
@@ -37,9 +45,55 @@ function DbManager($log, $filter){
         local: 'authorId',
         ref: 'Author.id'
       })
-      .addPrimaryKey(['isbn'])
-      .addIndex('idxIsbn', ['isbn'], false, lf.Order.DESC);
+      .addPrimaryKey(['isbn']);
+
+    schemaBuilder.connect().then(function(db){
+
+      // Add references
+      dbReferences.db           = db;
+      dbReferences.userTable_   = db.getSchema().table('User');
+      dbReferences.authorTable_ = db.getSchema().table('Author');
+      dbReferences.bookTable_   = db.getSchema().table('Book');
+
+      var row1 = dbReferences.userTable_.createRow({
+        'id': 1,
+        'username': 'try',
+        'password':'me'
+      });
+      var row2 = dbReferences.userTable_.createRow({
+        'username': 'try2',
+        'password':'me2'
+      });
+      var userRows = [row1, row2];
+
+      return db.insertOrReplace().into(dbReferences.userTable_).values(userRows).exec();
+    });
+  }
+
+  this.authenticate = function(username, password){
+
+    var resultHandler = function(queryResult){
+      if (queryResult && queryResult.length == 1) {
+        return queryResult[0].id;
+      }
+      return false;
     }
+
+    var userTable = dbReferences.userTable_;
+    var db = dbReferences.db;
+
+    return db.select()
+      .from(userTable)
+      .where(lf.op.and(
+        userTable.username.eq(username),
+        userTable.password.eq(password))
+      )
+      .exec()
+      .then(resultHandler);
+
+  }
+
+
 
 }
 
