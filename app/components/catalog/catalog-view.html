@@ -1,0 +1,100 @@
+<div class="row">
+
+  <!-- 1: filter based on Books  -->
+  <div class="col-xs-3">
+    <h3>Filtra per libro</h3>
+    <form class="form" name="bookFilterForm">
+      <!-- Book name -->
+      <div class="form-group">
+        <label for="title">Titolo</label>
+        <input class="form-control" type="text" name="title" ng-model="bookFilter.title" />
+      </div>
+      <!-- Year -->
+      <div class="form-group">
+        <label for="year">Anno</label>
+        <input class="form-control" type="number" name="year" ng-model="bookFilter.year" />
+      </div>
+      <!-- Buttons -->
+      <div class="form-group">
+        <button class="btn btn-primary" type="submit" ng-click="bookFilterApply()">Filtra</button>
+        <button class="btn btn-default" type="button" ng-click="resetBookFilter()">Reset</button>
+      </div>
+    </form>
+  </div>
+
+
+
+  <!-- -->
+  <div class="col-xs-9">
+
+    <!-- 2: author filter -->
+    <div class="col-xs-12">
+      <h3>Filtra autore</h3>
+      <form class="form form-inline" name="authorFilterForm">
+        <!-- Book name -->
+        <div class="form-group">
+          <label for="name">Nome</label>
+          <input class="form-control" type="text" name="name" ng-model="authorFilter.name" required />
+        </div>
+        <!-- Buttons -->
+        <div class="form-group">
+          <!--<button class="btn btn-primary" type="submit" ng-click="bookFilterApply()">Login</button> -->
+          <button class="btn btn-default" type="button" ng-click="resetAuthorFilter()">Reset</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Catalog -->
+    <div class="col-xs-12">
+      <h3>Lista autori</h3>
+      <table class="table" ng-if="!waitCatalog">
+        <thead>
+          <th ng-click="setAuthorOrderBy('name')">Autore</th>
+          <th ng-click="setAuthorOrderBy('pseudonym')">Nickname</th>
+          <th ng-click="setAuthorOrderBy('id')">Id</th>
+        </thead>
+        <tbody ng-repeat="author in catalog.Author | orderBy:authorSortField:authorSortFieldReverse[authorSortField] track by author.id ">
+          <tr>
+            <td>{{::author.name}}</td>
+            <td>{{::author.pseudonym}}</td>
+            <td>{{::author.id}}</td>
+            <td ng-click="showAuthorBooks(author)"> + </td>
+          </tr>
+          <tr ng-show="authorBooksExpanded[author.id]">
+            <td colspan="4">
+              <table class="table">
+                <thead>
+                  <th ng-click="setBookOrderBy(author.id, 'title')">Titolo</th>
+                  <th ng-click="setBookOrderBy(author.id, 'year')">Anno</th>
+                  <th ng-click="setBookOrderBy(author.id, 'basePrice')">Prezzo base</th>
+                  <th>Sconto</th>
+                  <th></th>
+                </thead>
+                <tbody ng-repeat="book in booksByAuthor(author.id) | orderBy:bookSortField[author.id]:bookSortFieldReverse[author.id+bookSortField[author.id]]">
+                  <td>{{book.title}}</td>
+                  <td>{{book.year}}</td>
+                  <td>{{book.basePrice | currency:"" }}</td>
+                  <td>12%</td>
+                  <td></td>
+                  <td ng-click="showBookDetail(book)">+</td>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!--<ul uib-pagination boundary-links="true" total-items="totalAuthors" ng-model="currentPage" class="pagination-sm"
+        previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">-->
+
+
+      </ul>
+
+
+    </div>
+
+  </div>
+
+
+
+</div>

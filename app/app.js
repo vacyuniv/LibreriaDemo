@@ -5,17 +5,18 @@ angular.module('libreriaDemoApp', [
   'ui.router',
   'loginModule',
   'templates',
-  'databaseManager'
+  'databaseManager',
+  'catalogModule'
 ]);
 
 
 // App main controller
-function controllerLibreriaDemo(dbManager, $log, $scope, $rootScope, $filter, authUserData){
+function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, $filter, AuthUserData, $state){
 
   $scope.title = "pippo";
-
-
-
+  if (!AuthUserData.isLogged){
+    $state.go('login');
+  }
 }
 
 // Application configuration
@@ -46,12 +47,13 @@ function configLibreriaDemo($stateProvider, $urlRouterProvider, $locationProvide
 
 }
 
-function runLibreriaDemo(DbManager){
+function runLibreriaDemo($log, DbManager){
+  $log.debug('Running phase');
   DbManager.initDb();
 }
 
 // DI
 angular.module('libreriaDemoApp')
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$logProvider', configLibreriaDemo])
-  .run(['DbManager', runLibreriaDemo])
-  .controller(['dbManager', '$log', '$scope', '$rootScope', '$filter', 'authUserData', controllerLibreriaDemo]);
+  .run(['$log', 'DbManager', runLibreriaDemo])
+  .controller('controllerLibreriaDemo',['DbManager', '$log', '$scope', '$rootScope', '$filter', 'AuthUserData', '$state', controllerLibreriaDemo]);

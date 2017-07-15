@@ -7,10 +7,13 @@ function AuthUserData($log, $q, DbManager){
 
   return {
 
+    isLogged : false,
+
     logout : function(){
       this.userId = undefined;
       this.username = undefined;
       this.password = undefined;
+      isLogged = false;
       return true;
     },
 
@@ -26,6 +29,7 @@ function AuthUserData($log, $q, DbManager){
       // Check data in DB with lovefield service
       return DbManager.authenticate(this.username, this.password)
         .then(function(resolve){
+          isLogged = true;
           // manage the correctness and return a result
           return resolve;
         });

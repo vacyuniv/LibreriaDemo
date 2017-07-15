@@ -38,7 +38,7 @@ function LoginController($scope, $rootScope, $filter, $log, AuthUserData, $state
     AuthUserData.login($scope.formLogin.username, $scope.formLogin.password)
       .then(function(result){
         if (result){
-          $state.go('');
+          $state.go('catalog');
         }
         // Print growl error - manage those tooo
         else {

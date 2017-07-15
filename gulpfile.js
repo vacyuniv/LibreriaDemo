@@ -18,7 +18,8 @@ var paths = {
       './bower_components/angular-route/angular-route.js',
       './bower_components/angular-ui-router/release/angular-ui-router.js',
       './bower_components/lovefield/dist/lovefield.js',
-      './bower_components/jquery/dist/jquery.js'
+      './bower_components/jquery/dist/jquery.js',
+      './bower_components/underscore/underscore.js'
     ],
     minified: [
       './bower_components/angular/angular.min.js',
@@ -26,7 +27,8 @@ var paths = {
       './bower_components/angular-route/angular-route.min.js',
       './bower_components/angular-ui-router/release/angular-ui-router.min.js',
       './bower_components/lovefield/dist/lovefield.min.js',
-      './bower_components/jquery/dist/jquery.min.js'
+      './bower_components/jquery/dist/jquery.min.js',
+      './bower_components/underscore/underscore-min.js'
     ]
   },
   libCss: {
