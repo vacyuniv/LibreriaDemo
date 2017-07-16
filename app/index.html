@@ -24,7 +24,12 @@
 
     <div ng-show="!waitInit">
       <div class="page-header">
-        <h1>Libreria Demo GetConnected</h1>
+        <h1>Libreria Demo GetConnected
+          <button type="button" class="btn btn-default pull-right" ng-show="!$state.includes('login')" ng-click="doLogout()">
+            <span class="hidden-xs">Logout</span>
+            <i class="fa fa-sign-out" aria-hidden="true"></i>
+          </button>
+        </h1>
       </div>
       <div class="view-container col-xs-12">
         <div ui-view="index"></div>

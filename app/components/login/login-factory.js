@@ -1,53 +1,37 @@
 // Factory definition
 function AuthUserData($log, $q, DbManager, $cookies){
 
-  /*var username = undefined;
-  var password = undefined;
-  var userId   = undefined;*/
-
   return {
 
-    userData: {
-      isLogged : false,
-      username : '',
-      userId   : ''
-    },
-
-
+    /**
+    * With a real case scenario, call a webservice to logout and handle the response, then remove the sessionCookie/localStorage.
+    * Here we have just a mocked promise.
+    */
     logout : function(){
-      /*userData.userId = undefined;
-      userData.username = undefined;
-      userData.password = undefined;
-      userData.isLogged = false;*/
+      var defer = $q.defer();
       $cookies.remove('libreriaDemoAppUserSession');
-      return true;
+      defer.resolve(true);
+      return defer.promise;
     },
 
-
-    /** Authenticate the user, simply checking on the db with dbServie
-    * Futher manage the resolved promise, telling this service's caller only true/false.
-    *   TODO: capire se ha senso mettere il salvataggio nella factory solo prima o solo dopo l'autenticazione.
+    /** Authenticate the user, simply checking on the db with dbServie.
+    * In a real case scenario, just call the webservice to log and store the sessionCookie/localStorage instead of this.
     */
     login : function(username, password){
-
       // Check data in DB with lovefield service
       return DbManager.authenticate(username, password)
         .then(function(resolve){
-          /*userData.isLogged = true;
-          userData.username = resolve.username;
-          userData.userId   = resolve.id;*/
           $cookies.putObject('libreriaDemoAppUserSession', resolve);
-          // manage the correctness and return a result
           return resolve;
         });
     },
 
+    /**
+    * Check if the user has already the sessionCookie/localStorage.
+    */
     hasSession : function(){
       var cookieObject = $cookies.getObject('libreriaDemoAppUserSession');
       if (cookieObject && cookieObject.username){
-        /*userData.isLogged = true;
-        userData.username = cookieObject.username;
-        userData.userId   = cookieObject.id;*/
         return true;
       }
       return false;

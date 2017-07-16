@@ -28,3 +28,8 @@ span.modal-close > i {
   padding: 2px;
   width:29px;
 }
+
+.no-horizontal-padding {
+  padding-left: 0px;
+  padding-right: 0px;
+}

@@ -1,29 +1,32 @@
 <div class="row">
 
   <div class="col-xs-offset-3 col-xs-6">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form class="form" name="loginForm">
 
-    <form class="form" name="loginForm">
+          <!-- Username -->
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input class="form-control" type="text" name="username" ng-model="formLogin.username" required />
+          </div>
 
-      <!-- Username -->
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input class="form-control" type="text" name="username" ng-model="formLogin.username" required />
+          <!-- Password -->
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input class="form-control" type="password" name="password" ng-model="formLogin.password" required />
+          </div>
+
+          <!-- Buttons -->
+          <div class="form-group">
+            <button class="btn btn-primary" type="submit" ng-click="doLogin()">
+              <i class="fa fa-sign-in" aria-hidden="true"></i> Login
+            </button>
+            <button class="btn btn-default" type="submit" ng-click="resetForm()">Reset</button>
+
+          </div>
+        </form>
       </div>
-
-      <!-- Password -->
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input class="form-control" type="password" name="password" ng-model="formLogin.password" required />
-      </div>
-
-      <!-- Buttons -->
-      <div class="form-group">
-        <button class="btn btn-primary" type="submit" ng-click="doLogin()">Login</button>
-
-        <button class="btn btn-default" type="submit" ng-click="resetForm()">Reset</button>
-
-      </div>
-    </form>
-
+    </div>
   </div>
 </div>

@@ -45,6 +45,7 @@ function DbManager($log){
       .addColumn('year', lf.Type.INTEGER)
       .addColumn('authorId', lf.Type.INTEGER)
       .addColumn('basePrice', lf.Type.NUMBER)
+      .addColumn('baseDiscount', lf.Type.NUMBER)
       .addForeignKey('fk_authorId',{
         local: 'authorId',
         ref: 'Author.id'
@@ -113,6 +114,7 @@ function DbManager($log){
           'editor': 'Mondadori',
           'year': 2003,
           'basePrice': 9.90,
+          'baseDiscount': 10,
           'authorId': 1
         });
         var row2 = dbReferences.bookTable.createRow({
@@ -123,6 +125,7 @@ function DbManager($log){
           'editor': 'Mondadori',
           'year': 1979,
           'basePrice': 8.90,
+          'baseDiscount': 12,
           'authorId': 3
         });
         var row3 = dbReferences.bookTable.createRow({
@@ -132,7 +135,8 @@ function DbManager($log){
           'imageUrl': 'https://images-na.ssl-images-amazon.com/images/I/71LJTc5gfYL.jpg',
           'editor': 'Mondadori',
           'year': 1995,
-          'basePrice': 9.90,
+          'basePrice': 12.90,
+          'baseDiscount': 20,
           'authorId': 1
         });
         var bookRows = [ row1, row2, row3 ];
@@ -219,7 +223,7 @@ function DbManager($log){
     console.log(bookYear);
 
     return db.select(authorTable.id, authorTable.pseudonym, authorTable.name, bookTable.isbn, bookTable.title,
-      bookTable.year, bookTable.basePrice, bookTable.authorId)
+      bookTable.year, bookTable.basePrice, bookTable.authorId, bookTable.baseDiscount)
       .from(authorTable, bookTable)
       .where( lf.op.and(
           bookTable.authorId.eq(authorTable.id),

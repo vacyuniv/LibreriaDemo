@@ -13,13 +13,14 @@ angular.module('libreriaDemoApp', [
 ]);
 
 
-// App main controller
+// --- App main controller ----------------------
 function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, $filter, AuthUserData, $state){
-  $log.debug('On Main Controller');
+
   $scope.waitInit = true;
+
+  // Wait for the db initialization, see runLibreriaDemo function.
   $rootScope._dbInitialization
     .then(function(resolve){
-      $log.debug('Now going to the correct state');
       $scope.waitInit = false;
       if ( !AuthUserData.hasSession() ){
         $state.go('login');
@@ -27,11 +28,17 @@ function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, $filter, Au
         $state.go('catalog');
       }
     });
+
+  $scope.doLogout = function(){
+    AuthUserData.logout()
+      .then(function(resolve){
+        $log.info('User successfully logged out. Returning to login page.');
+        $state.go('login');
+      });
+  }
 }
 
-// Application configuration
-// TODO: capire come impostare un redirect nel caso in cui l'utente non sia autenticato
-//        vedere coi cookie e/o con un token autorizzativo
+// --- Application configuration ----------------
 function configLibreriaDemo($stateProvider, $urlRouterProvider, $locationProvider, $logProvider){
 
   $logProvider.debugEnabled(true);
@@ -40,20 +47,22 @@ function configLibreriaDemo($stateProvider, $urlRouterProvider, $locationProvide
 }
 
 function runLibreriaDemo($log, DbManager, $rootScope, $q){
-  $log.debug('Running phase');
+
+  // Create the promise for DB init
   var bootstrappingPromise = $q.defer();
   $rootScope._dbInitialization = bootstrappingPromise.promise;
+  // Then init and resolve the promise
+  DbManager.initDb()
+    .then(function(resolve){
+      $log.info('DB initializated!');
+      bootstrappingPromise.resolve(true);
+    });
+  // Handler for possible errors on stateChange
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
     $state.go('login');
   });
-  DbManager.initDb()
-    .then(function(resolve){
-      $log.debug('DB initializated!');
-      bootstrappingPromise.resolve(true);
-    });
 }
 
-// DI
 angular.module('libreriaDemoApp')
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$logProvider', configLibreriaDemo])
   .run(['$log', 'DbManager', '$rootScope', '$q', runLibreriaDemo])
