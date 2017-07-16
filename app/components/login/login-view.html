@@ -27,6 +27,11 @@
           </div>
         </form>
       </div>
+      <div class="panel-body">
+        <div uib-alert ng-repeat="alert in alerts" class="alert-danger" dismiss-on-timeout="3000" close="closeAlert($index)">
+          {{ alert.msg }}
+        </div>
+      </div>
     </div>
   </div>
 </div>

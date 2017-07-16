@@ -33,6 +33,12 @@ span.modal-close > i {
   padding-left: 0px;
   padding-right: 0px;
 }
+@media (max-width:767px){
+  .xs-no-horizontal-padding {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
 
 .page-header {
   margin-top: 20px !important;

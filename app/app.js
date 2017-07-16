@@ -15,8 +15,7 @@ angular.module('libreriaDemoApp', [
 
 // --- App main controller ----------------------
 function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, $filter, AuthUserData, $state){
-
-  $scope.waitInit = true;
+  // Expose state for view
   $scope.$state = $state;
 
   // Wait for the db initialization, see runLibreriaDemo function.
@@ -30,6 +29,7 @@ function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, $filter, Au
       }
     });
 
+  // Handle the logout from everywhere
   $scope.doLogout = function(){
     AuthUserData.logout()
       .then(function(resolve){
@@ -41,14 +41,13 @@ function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, $filter, Au
 
 // --- Application configuration ----------------
 function configLibreriaDemo($stateProvider, $urlRouterProvider, $locationProvider, $logProvider){
-
   $logProvider.debugEnabled(true);
   $urlRouterProvider.otherwise('/login');
-
 }
 
 function runLibreriaDemo($log, DbManager, $rootScope, $q){
-
+  // Hide all until fully initialized
+  $rootScope.waitInit = true;
   // Create the promise for DB init
   var bootstrappingPromise = $q.defer();
   $rootScope._dbInitialization = bootstrappingPromise.promise;
@@ -57,6 +56,9 @@ function runLibreriaDemo($log, DbManager, $rootScope, $q){
     .then(function(resolve){
       $log.info('DB initializated!');
       bootstrappingPromise.resolve(true);
+      // Show the app to the world
+      $rootScope.waitInit = false;
+      angular.element('#appContent').show();
     });
   // Handler for possible errors on stateChange
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {

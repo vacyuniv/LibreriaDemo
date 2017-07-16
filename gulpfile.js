@@ -14,28 +14,26 @@ var sourcemaps    = require('gulp-sourcemaps');
 var paths = {
   libJs: {
     source: [
+      './bower_components/jquery/dist/jquery.js',
       './bower_components/angular/angular.js',
       './bower_components/angular-animate/angular-animate.js',
       './bower_components/angular-route/angular-route.js',
       './bower_components/angular-ui-router/release/angular-ui-router.js',
       './bower_components/lovefield/dist/lovefield.js',
-      './bower_components/jquery/dist/jquery.js',
       './bower_components/underscore/underscore.js',
       './bower_components/angular-cookies/angular-cookies.js',
       './bower_components/angular-bootstrap/ui-bootstrap-tpls.js'
-      //,'./bower_components/angular-bootstrap/ui-bootstrap.js'
     ],
     minified: [
+      './bower_components/jquery/dist/jquery.min.js',
       './bower_components/angular/angular.min.js',
       './bower_components/angular/angular-animate.min.js',
       './bower_components/angular-route/angular-route.min.js',
       './bower_components/angular-ui-router/release/angular-ui-router.min.js',
       './bower_components/lovefield/dist/lovefield.min.js',
-      './bower_components/jquery/dist/jquery.min.js',
       './bower_components/underscore/underscore-min.js',
       './bower_components/angular-cookies/angular-cookies.min.js',
       './bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
-      //,'./bower_components/angular-bootstrap/ui-bootstrap.min.js'
     ]
   },
   libCss: {

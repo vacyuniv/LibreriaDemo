@@ -1,6 +1,7 @@
 // Module definition
 angular.module('loginModule', [
   'databaseManager',
+  'ui.bootstrap',
   'libreriaDemoApp'
 ]);
 
@@ -16,7 +17,6 @@ function LoginConfig($stateProvider){
       }
     }
   });
-
 }
 
 
@@ -26,8 +26,9 @@ function LoginController($scope, $rootScope, $filter, $log, AuthUserData, $state
   $scope.formLogin = {};
   $scope.formLogin.username = 'try';
   $scope.formLogin.password = 'me';
+  $scope.alerts = [];
 
-  // Reset the form, used for init too
+  // Reset the form, useful for init too
   $scope.resetForm = function(){
     $scope.formLogin = {};
     $scope.formLogin.username = '';
@@ -41,11 +42,16 @@ function LoginController($scope, $rootScope, $filter, $log, AuthUserData, $state
         if (result){
           $state.go('catalog');
         }
-        // Print growl error - manage those tooo
+        // Print a little friendly alert
         else {
+          $scope.alerts.push( { msg: 'Credenziali errate!'} );
           $log.error('Auth failed! Code: ' + result);
         }
       });
+  }
+
+  $scope.closeAlert = function(index){
+    $scope.alerts.splice(index, 1);
   }
 
 }

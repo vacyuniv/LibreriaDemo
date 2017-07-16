@@ -19,11 +19,13 @@ function AuthUserData($log, $q, DbManager, $cookies){
     */
     login : function(username, password){
       // Check data in DB with lovefield service
-      return DbManager.authenticate(username, password)
+      var defer = $q.defer();
+      DbManager.authenticate(username, password)
         .then(function(resolve){
           $cookies.putObject('libreriaDemoAppUserSession', resolve);
-          return resolve;
+          defer.resolve(resolve);
         });
+      return defer.promise;
     },
 
     /**
