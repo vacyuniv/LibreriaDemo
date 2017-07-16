@@ -37,18 +37,18 @@
     <div class="col-xs-12 no-horizontal-padding">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <span>Filtra autore</span>
+          <span>Filtra per autore</span>
         </div>
         <div class="panel-body">
           <form class="form form-inline" name="authorFilterForm">
-            <!-- Book name -->
+            <!-- Author name -->
             <div class="form-group">
               <label for="name">Nome</label>
-              <input class="form-control" type="text" name="name" ng-model="authorFilter.name" required />
+              <input class="form-control" type="text" name="name" ng-model="authorFilter.name" />
             </div>
             <!-- Buttons -->
             <div class="form-group">
-              <!--<button class="btn btn-primary" type="submit" ng-click="bookFilterApply()">Login</button> -->
+              <button class="btn btn-primary" type="submit" ng-click="getCatalogList(authorFilter)">Filtra</button>
               <button class="btn btn-default" type="button" ng-click="resetAuthorFilter()">Reset</button>
             </div>
           </form>
@@ -76,9 +76,9 @@
           <!-- results -->
           <div ng-if="!waitCatalog">
             <!-- Message when no records -->
-            <div class="alert alert-info" role="alert" ng-show="(catalog.Author|filter:authorFilter).length == 0">Nessun record trovato!</div>
+            <div class="alert alert-info" role="alert" ng-show="catalog.Author.length == 0">Nessun record trovato!</div>
             <!-- Actual table containing the catalog -->
-            <table class="table table-hover table-bordered" ng-if="!waitCatalog" ng-show="(catalog.Author|filter:authorFilter).length > 0">
+            <table class="table table-hover table-bordered" ng-if="!waitCatalog" ng-show="catalog.Author.length > 0">
               <thead>
                 <th ng-click="setAuthorOrderBy('name')">
                   <span>Autore</span>
@@ -94,7 +94,9 @@
                 </th>
                 <th></th>
               </thead>
-              <tbody ng-repeat="author in catalog.Author | filter:authorFilter | orderBy:authorSortField:authorSortFieldReverse[authorSortField] track by author.id ">
+              <tbody ng-repeat="author in catalog.Author | orderBy:authorSortField:authorSortFieldReverse[authorSortField]
+                | limitTo:paginationSchema.maxPageSize:paginationSchema.indexFirstElementForPage
+                track by author.id ">
                 <tr>
                   <td>{{::author.name}}</td>
                   <td>{{::author.pseudonym}}</td>
@@ -141,7 +143,9 @@
               </tbody>
             </table>
             <!-- Paginator -->
-            <ul uib-pagination boundary-links="true" total-items="totalAuthors" items-per-page="itemPerPage" ng-model="currentPage" class="pagination-sm"
+            <ul class="pagination-sm" uib-pagination boundary-links="true" total-items="catalog.Author.length"
+              items-per-page="paginationSchema.maxPageSize"
+              ng-model="paginationSchema.currentPage" ng-change="changePositionPage(paginationSchema.currentPage)"
               previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
             </ul>
           </div>

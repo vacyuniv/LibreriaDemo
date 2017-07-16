@@ -5,10 +5,10 @@ function CatalogService($log, $q, DbManager){
   * Get a list of authors, containing each one their books.
   * {return} a new $q Promise containing the catalog, so that angular will trigger its $scope.apply() cycle and correctly render anything.
   */
-  this.getCatalog = function(bookTitle, bookYear){
+  this.getCatalog = function(bookTitle, bookYear, authorName){
     var defer = $q.defer();
     // get the author list based on
-    DbManager.getCatalog(bookTitle, bookYear)
+    DbManager.getCatalog(bookTitle, bookYear, authorName)
       .then(function(result){
         // Aggregate the fields so that i have an object with 2 lists, Author and Book
         console.log(result);

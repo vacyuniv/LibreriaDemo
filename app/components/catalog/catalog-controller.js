@@ -35,10 +35,6 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
     $state.go('login');
   }
 
-  $scope.totalAuthors = 0;
-  $scope.currentPage  = 1;
-  $scope.itemPerPage  = 3;
-
   // --- Book Filter ----------------------------------------
   $scope.bookFilter = {}
   $scope.resetBookFilter = function(){
@@ -58,17 +54,20 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
     Author : [],
     Book   : []
   };
-  $scope.waitCatalog = true;
+  $scope.waitCatalog  = true;
+  $scope.totalAuthors = 0;
 
   // Retrieve the catalog from service
   $scope.getCatalogList = function(filterForm){
     var bookTitle = undefined;
     var bookYear  = undefined;
+    var authorName = undefined;
     if (filterForm){
-      if (filterForm.title) { bookTitle = filterForm.title; }
-      if (filterForm.year)  { bookYear = filterForm.year; }
+      if (filterForm.title) { bookTitle   = filterForm.title; }
+      if (filterForm.year)  { bookYear    = filterForm.year;  }
+      if (filterForm.name)  { authorName  = filterForm.name;  }
     }
-    CatalogService.getCatalog(bookTitle, bookYear)
+    CatalogService.getCatalog(bookTitle, bookYear, authorName)
       .then(function(catalog){
         $scope.catalog = catalog;
         $scope.totalAuthors = catalog.Author.length;
@@ -79,6 +78,8 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
   $scope.booksByAuthor = function(authorId){
     return _.where($scope.catalog.Book, {'authorId': authorId});
   };
+
+  // Watch over $scope.catalog.Author changes to easily get the correct length
 
   // --- Expand/collapse utilities --------------------------------------------------------
   $scope.authorBooksExpanded = [];
@@ -123,11 +124,25 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
         }
       }
     }
-    // if ($scope.bookSortFieldReverse[keyToReverse] == undefined){
-    //   $scope.bookSortFieldReverse[keyToReverse] = false;
-    // } else {
-    //   $scope.bookSortFieldReverse[keyToReverse] = !$scope.bookSortFieldReverse[keyToReverse];
-    // }
+  }
+
+  // --- Pagination utilities ----------------------------------------------------------------
+  $scope.paginationSchema = {
+    currentPage : 1,
+    maxPageSize : 4,
+    indexFirstElementForPage : 0
+  }
+  $scope.changePositionPage = function(){
+    if ($scope.catalog.Author && $scope.catalog.Author.length > 0) {
+      $scope.paginationSchema.indexFirstElementForPage = ($scope.paginationSchema.currentPage - 1) * $scope.paginationSchema.maxPageSize + 1;
+    }
+  }
+  $scope.goToLastPage = function(){
+    if ($scope.catalog.Author && $scope.catalog.Author.length > 0) {
+      var total    = $scope.catalog.Author.length;
+      var lastPage = Math.ceil(total / $scope.paginationSchema.maxPageSize);
+      $scope.changePositionPage(lastPage);
+    }
   }
 
   // --- Book detail open ----------------------------------------

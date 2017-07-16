@@ -147,7 +147,7 @@ function DbManager($log, MOCK_DB){
   * Retrieve the catalog from DB
   * @return a list of records of both Author and Book joined, filtered by specified fields.
   */
-  this.getCatalog = function(bookTitle, bookYear){
+  this.getCatalog = function(bookTitle, bookYear, authorName){
 
     var db          = dbReferences.db;
     var authorTable = dbReferences.authorTable;
@@ -159,7 +159,6 @@ function DbManager($log, MOCK_DB){
     } else {
       bookTitle = new RegExp(bookTitle, 'gi');
     }
-    console.log(bookTitle);
     var bookYearFrom = bookYear;
     var bookYearTo   = 9999;
     if (!bookYearFrom || parseInt(bookYearFrom) == NaN){
@@ -167,13 +166,18 @@ function DbManager($log, MOCK_DB){
     } else {
       bookYearTo = bookYearFrom;
     }
-    console.log(bookYear);
+    if(!authorName){
+      authorName = new RegExp('.*');
+    } else {
+      authorName = new RegExp(authorName, 'gi');
+    }
 
     return db.select(authorTable.id, authorTable.pseudonym, authorTable.name, bookTable.isbn, bookTable.title,
       bookTable.year, bookTable.basePrice, bookTable.authorId, bookTable.baseDiscount)
       .from(authorTable, bookTable)
       .where( lf.op.and(
           bookTable.authorId.eq(authorTable.id),
+          authorTable.name.match(authorName),
           bookTable.title.match(bookTitle),
           bookTable.year.gte(bookYearFrom),
           bookTable.year.lte(bookYearTo)
