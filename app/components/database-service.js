@@ -178,13 +178,17 @@ function DbManager($log){
   * @return a list of authors
   */
   this.getBook = function(bookId){
-
     var db          = dbReferences.db;
-    var bookTable   = dbReferences.bookrTable;
+    var bookTable   = dbReferences.bookTable;
+    var authorTable = dbReferences.authorTable;
 
     return db.select()
-      .from(bookTable)
-      .where(bookTable.id.eq(bookId))
+      .from(bookTable, authorTable)
+      .where( lf.op.and(
+          authorTable.id.eq(bookTable.authorId),
+          bookTable.isbn.eq(bookId)
+        )
+      )
       .exec();
   }
 
@@ -202,27 +206,29 @@ function DbManager($log){
     if (!bookTitle) {
       bookTitle = new RegExp('.*');
     } else {
-      bookTitle = new RegExp('*'+bookTitle+'*');
+      bookTitle = new RegExp(bookTitle, 'gi');
     }
     console.log(bookTitle);
-    if (!bookYear || parseInt(bookYear) == NaN){
-      bookYear = 1870;
+    var bookYearFrom = bookYear;
+    var bookYearTo   = 9999;
+    if (!bookYearFrom || parseInt(bookYearFrom) == NaN){
+      bookYearFrom = 1870;
+    } else {
+      bookYearTo = bookYearFrom;
     }
     console.log(bookYear);
 
-    var maquery = db.select(authorTable.id, authorTable.pseudonym, authorTable.name, bookTable.isbn, bookTable.title, bookTable.year, bookTable.basePrice, bookTable.authorId)
+    return db.select(authorTable.id, authorTable.pseudonym, authorTable.name, bookTable.isbn, bookTable.title,
+      bookTable.year, bookTable.basePrice, bookTable.authorId)
       .from(authorTable, bookTable)
       .where( lf.op.and(
           bookTable.authorId.eq(authorTable.id),
           bookTable.title.match(bookTitle),
-          bookTable.year.gt(bookYear)
+          bookTable.year.gte(bookYearFrom),
+          bookTable.year.lte(bookYearTo)
         )
-      );
-      //.innerJoin(bookTable, authorTable.id.eq(bookTable.authorId))
-      //.groupBy(authorTable.id)
-      console.log(maquery.explain());
-      //maquery.bind([bookTitle, bookYear]);
-      return maquery.exec();
+      )
+      .exec();
   }
 
 }

@@ -21,7 +21,9 @@ var paths = {
       './bower_components/lovefield/dist/lovefield.js',
       './bower_components/jquery/dist/jquery.js',
       './bower_components/underscore/underscore.js',
-      './bower_components/angular-cookies/angular-cookies.js'
+      './bower_components/angular-cookies/angular-cookies.js',
+      './bower_components/angular-bootstrap/ui-bootstrap-tpls.js'
+      //,'./bower_components/angular-bootstrap/ui-bootstrap.js'
     ],
     minified: [
       './bower_components/angular/angular.min.js',
@@ -31,12 +33,15 @@ var paths = {
       './bower_components/lovefield/dist/lovefield.min.js',
       './bower_components/jquery/dist/jquery.min.js',
       './bower_components/underscore/underscore-min.js',
-      './bower_components/angular-cookies/angular-cookies.min.js'
+      './bower_components/angular-cookies/angular-cookies.min.js',
+      './bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
+      //,'./bower_components/angular-bootstrap/ui-bootstrap.min.js'
     ]
   },
   libCss: {
     source: [
-      './bower_components/**/*.css'
+      './bower_components/**/*.css',
+      './bower_components/angular-bootstrap/*.css'
     ],
     fontAwesome : [
       './app/assets/font-awesome-4.7.0/css/*.min.css',
@@ -99,7 +104,7 @@ gulp.task('buildCss:lib', function(){
     .pipe( gulp.dest('./dist/css'));
 });
 gulp.task('buildCss:app', function(){
-  return gulp.src(paths.libCss.source)
+  return gulp.src(paths.appCss)
     .pipe( concat('app.css'))
     .pipe( gulp.dest('./dist/css'));
 });
@@ -137,7 +142,7 @@ gulp.task('watch', function() {
   promiseList = [];
   jsPromise = gulp.watch(paths.appJs, gulp.parallel('buildJs'));
   htmlPromise = gulp.watch(paths.appHtml, gulp.parallel('buildHtml'));
-  cssPromise = gulp.watch(paths.appCss, gulp.parallel('buildCss'));
+  cssPromise = gulp.watch(paths.appCss, gulp.parallel('buildCss:app'));
   promiseList.push(jsPromise);
   promiseList.push(htmlPromise);
   promiseList.push(cssPromise);

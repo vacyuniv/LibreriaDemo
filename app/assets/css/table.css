@@ -1,6 +1,0 @@
-/** Styles for catalog and tables
-*/
-.bookCellContainer{
-  max-height: 150px;
-  overflow-y: scroll;
-}

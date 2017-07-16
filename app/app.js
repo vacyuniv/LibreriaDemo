@@ -4,10 +4,12 @@ angular.module('libreriaDemoApp', [
   'ngRoute',
   'ngCookies',
   'ui.router',
+  'ui.bootstrap',
   'loginModule',
   'templates',
   'databaseManager',
-  'catalogModule'
+  'catalogModule',
+  'bookModule'
 ]);
 
 

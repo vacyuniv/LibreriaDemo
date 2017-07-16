@@ -1,0 +1,48 @@
+/** Styles for catalog and tables
+*/
+.bookCellContainer {
+  max-height: 150px;
+  overflow-y: scroll;
+}
+.bookCellContainer > table > thead > tr > th {
+  font-size: smaller;
+}
+.bookCellContainer td {
+  font-size: smaller;
+}
+tr.bookRow {
+  background-color: rgba(46, 109, 164, 0.2) !important;
+}
+/*tr.bookRow:hover {
+  background-color: rgba(46, 109, 164, 0.2);
+}*/
+
+.panel-body-catalog {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+/*  Directional sorting
+*/
+span.sorting-arrows {
+  display: inline-block;
+  font-size: 12px;
+  width: 10px;
+  height: 1em;
+}
+span.sorting-arrows > i.fa-caret-up {
+  position: relative;
+  top: -5px;
+  color: lightgrey;
+}
+span.sorting-arrows > i.fa-caret-up.sorted {
+  color: black;
+}
+span.sorting-arrows > i.fa-caret-down {
+  position: relative;
+  bottom: 13px;
+  color: lightgrey;
+}
+span.sorting-arrows > i.fa-caret-down.sorted {
+  color: black;
+}

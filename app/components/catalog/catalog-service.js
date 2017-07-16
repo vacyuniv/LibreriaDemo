@@ -3,6 +3,7 @@ function CatalogService($log, $q, DbManager){
 
   /**
   * Get a list of authors, containing each one their books.
+  * {return} a new $q Promise containing the catalog, so that angular will trigger its $scope.apply() cycle and correctly render anything.
   */
   this.getCatalog = function(bookTitle, bookYear){
     var defer = $q.defer();

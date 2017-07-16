@@ -1,7 +1,10 @@
 // Module definition
 angular.module('catalogModule', [
   'databaseManager',
-  'libreriaDemoApp'
+  'libreriaDemoApp',
+  'ui.router',
+  'ui.bootstrap',
+  'bookModule'
 ]);
 
 // Module configuration
@@ -25,7 +28,7 @@ function CatalogConfig($stateProvider){
 }
 
 // Controller definition
-function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $state, CatalogService) {
+function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $state, CatalogService, BookActions) {
 
   // GTFO when not logged
   if ( !AuthUserData.hasSession() ){
@@ -41,10 +44,6 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
   $scope.resetBookFilter = function(){
     $scope.bookFilter.title = '';
     $scope.bookFilter.year  = '';
-  }
-
-  $scope.bookFilterApply = function(){
-
   }
 
   // --- Author Filter ----------------------------------------
@@ -89,30 +88,56 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
 
   // --- Sorting utilities ----------------------------------------------------------------
   $scope.authorSortField        = 'name';
-  $scope.authorSortFieldReverse = [];
-  $scope.bookSortField        = [];
-  $scope.bookSortFieldReverse = [];
+  $scope.authorSortFieldReverse = {
+    'name'     : undefined,
+    'pseudonym': undefined,
+    'id'       : undefined
+  };
+  $scope.bookSortField        = {};
+  $scope.bookSortFieldReverse = {};
   $scope.setAuthorOrderBy = function(fieldToSort){
     $scope.authorSortField = fieldToSort;
-    if ($scope.authorSortFieldReverse[fieldToSort] == undefined) {
-      $scope.authorSortFieldReverse[fieldToSort] = false;
-    } else {
-      $scope.authorSortFieldReverse[fieldToSort] = !$scope.authorSortFieldReverse[fieldToSort];
+    for (var property in $scope.authorSortFieldReverse){
+      if (property == fieldToSort){
+        $scope.authorSortFieldReverse[property] = !$scope.authorSortFieldReverse[property];
+      } else {
+        $scope.authorSortFieldReverse[property] = undefined;
+      }
     }
   }
   $scope.setBookOrderBy = function(authorId, fieldToSort){
     $scope.bookSortField[authorId] = fieldToSort;
-    var keyToReverse = '' + authorId + fieldToSort;
-    if ($scope.bookSortFieldReverse[keyToReverse] == undefined){
+    var keyToReverse = authorId + '-' + fieldToSort;
+    // init when not defined
+    if ($scope.bookSortFieldReverse[keyToReverse] == undefined) {
       $scope.bookSortFieldReverse[keyToReverse] = false;
-    } else {
-      $scope.bookSortFieldReverse[keyToReverse] = !$scope.bookSortFieldReverse[keyToReverse];
     }
+    for (var property in $scope.bookSortFieldReverse) {
+      // reset only those of the same author
+      var propAuthorId = ''+ property.split("-")[0];
+      if (propAuthorId ==  ''+authorId) {
+        if (property == keyToReverse) {
+          $scope.bookSortFieldReverse[property] = !$scope.bookSortFieldReverse[property]
+        } else {
+          $scope.bookSortFieldReverse[property] = undefined;
+        }
+      }
+    }
+    // if ($scope.bookSortFieldReverse[keyToReverse] == undefined){
+    //   $scope.bookSortFieldReverse[keyToReverse] = false;
+    // } else {
+    //   $scope.bookSortFieldReverse[keyToReverse] = !$scope.bookSortFieldReverse[keyToReverse];
+    // }
   }
+
+  // --- Book detail open ----------------------------------------
+  $scope.showBookDetail = function(book) {
+    BookActions.openBookDetail(book.isbn);
+  }
+
 }
 
 
 angular.module('catalogModule')
   .config(['$stateProvider', CatalogConfig])
-  //.run(['$log', 'DbManager', '$rootScope', '$q', runLibreriaDemo])
-  .controller('catalogController', ['$scope', '$rootScope', '$filter', '$log', 'AuthUserData', '$state', 'CatalogService', CatalogController]);
+  .controller('catalogController', ['$scope', '$rootScope', '$filter', '$log', 'AuthUserData', '$state', 'CatalogService', 'BookActions', CatalogController]);

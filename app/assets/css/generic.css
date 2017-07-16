@@ -10,3 +10,21 @@ body ::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;
 }
+
+span.modal-close {
+  position: absolute;
+  top: -17px;
+  right: -12px;
+  font-size: 25px;
+  cursor: pointer;
+  text-align:center;
+}
+span.modal-close > i {
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  border: 1px solid grey;
+  background-color: white;
+  padding: 2px;
+  width:29px;
+}
