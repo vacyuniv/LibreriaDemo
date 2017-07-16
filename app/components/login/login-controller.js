@@ -1,6 +1,7 @@
 // Module definition
 angular.module('loginModule', [
-  'databaseManager'
+  'databaseManager',
+  'libreriaDemoApp'
 ]);
 
 // Module configuration
@@ -51,4 +52,5 @@ function LoginController($scope, $rootScope, $filter, $log, AuthUserData, $state
 
 angular.module('loginModule')
   .config(['$stateProvider', LoginConfig])
+  //.run(['$log', 'DbManager', '$rootScope', '$q', runLibreriaDemo])
   .controller('loginController', ['$scope', '$rootScope','$filter','$log', 'AuthUserData', '$state', LoginController]);

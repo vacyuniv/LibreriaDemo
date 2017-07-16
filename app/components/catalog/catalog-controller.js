@@ -1,6 +1,7 @@
 // Module definition
 angular.module('catalogModule', [
-  'databaseManager'
+  'databaseManager',
+  'libreriaDemoApp'
 ]);
 
 // Module configuration
@@ -13,7 +14,13 @@ function CatalogConfig($stateProvider){
         templateUrl: 'components/catalog/catalog-view.html',
         controller: 'catalogController'
       }
+    },
+    resolve: {
+      dbInit: function($rootScope){
+        return $rootScope._dbInitialization;
+      }
     }
+
   });
 }
 
@@ -25,6 +32,7 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
     $state.go('login');
   }
 
+  $log.debug('On Catalog controller');
   $scope.totalAuthors = 0;
   $scope.currentPage  = 1;
 
@@ -106,4 +114,5 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
 
 angular.module('catalogModule')
   .config(['$stateProvider', CatalogConfig])
+  //.run(['$log', 'DbManager', '$rootScope', '$q', runLibreriaDemo])
   .controller('catalogController', ['$scope', '$rootScope', '$filter', '$log', 'AuthUserData', '$state', 'CatalogService', CatalogController]);

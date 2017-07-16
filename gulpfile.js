@@ -5,7 +5,8 @@ var gutil     = require('gulp-util');
 var concat    = require('gulp-concat');
 var rimraf    = require('gulp-rimraf');
 var templateCache = require('gulp-angular-templatecache');
-var connect   = require('gulp-connect');
+var connect       = require('gulp-connect');
+var sourcemaps    = require('gulp-sourcemaps');
 
 // ----------------------------------------------------------------------------------------
 // PAths
@@ -36,8 +37,14 @@ var paths = {
   libCss: {
     source: [
       './bower_components/**/*.css'
+    ],
+    fontAwesome : [
+      './app/assets/font-awesome-4.7.0/css/*.min.css',
     ]
   },
+  fonts: [
+    './app/assets/font-awesome-4.7.0/fonts/*'
+  ],
   appJs: [ "./app/**/*.js" ],
   appHtml: [ "./app/**/*.html", "!./app/index.html"],
   appHtmlIndex: ["./app/index.html"],
@@ -51,7 +58,9 @@ var paths = {
 // ---------------------------------------------------------------------------------------------------------------
 gulp.task('buildJs:app', function(){
   return gulp.src(paths.appJs)
+    .pipe(sourcemaps.init())
     .pipe( concat('app.js'))
+    .pipe(sourcemaps.write('../maps'))
     .pipe( gulp.dest('./dist/js'));
 });
 // --- Libs! As separate task because... for some reason... enhance speed... ---------------
@@ -82,7 +91,7 @@ gulp.task('buildHtml:views', function(){
 gulp.task("buildHtml", gulp.series('buildHtml:index', 'buildHtml:views'));
 
 // ---------------------------------------------------------------------------------------------------------------
-// Css/Template Task
+// Css/Fonts Task
 // ---------------------------------------------------------------------------------------------------------------
 gulp.task('buildCss:lib', function(){
   return gulp.src(paths.libCss.source)
@@ -94,8 +103,18 @@ gulp.task('buildCss:app', function(){
     .pipe( concat('app.css'))
     .pipe( gulp.dest('./dist/css'));
 });
+//- --- fontAwesome is not so Awesome on configuration and docs for dependencies -----
+gulp.task('buildCss:fontAwesome:css', function(){
+  return gulp.src(paths.libCss.fontAwesome)
+    .pipe( gulp.dest('./dist/css'));
+});
+gulp.task('buildCss:fontAwesome:font', function(){
+  return gulp.src(paths.fonts)
+    .pipe( gulp.dest('./dist/fonts'));
+});
+gulp.task('buildCss:fontAwesome', gulp.parallel('buildCss:fontAwesome:css', 'buildCss:fontAwesome:font'));
 // >>> MAIN CSS TASK
-gulp.task('buildCss', gulp.series('buildCss:lib', 'buildCss:app'));
+gulp.task('buildCss', gulp.series('buildCss:lib', 'buildCss:app', 'buildCss:fontAwesome') );
 
 
 // ---------------------------------------------------------------------------------------------------------------

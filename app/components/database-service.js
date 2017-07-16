@@ -18,6 +18,7 @@ function DbManager($log){
   * webservice and inject as js objects.
   */
   this.initDb = function(){
+    console.log('Initializing schema for DB');
     var schemaBuilder = lf.schema.create('libreriaDemo', 1);
 
     // Schema declaration of the 3 tables:
@@ -52,6 +53,8 @@ function DbManager($log){
 
     // ---- Connection to DB and populate the tables -------
     return schemaBuilder.connect().then(function(db){
+
+      console.log('Populating DB');
 
       // Add references for queries
       dbReferences.db           = db;
@@ -222,11 +225,7 @@ function DbManager($log){
       return maquery.exec();
   }
 
-
-  if (dbReferences.db == undefined){
-    this.initDb();
-  }
-
 }
 
-angular.module('databaseManager').service('DbManager', DbManager );
+angular.module('databaseManager')
+  .service('DbManager', DbManager );

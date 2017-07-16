@@ -13,7 +13,7 @@ angular.module('libreriaDemoApp', [
 
 // App main controller
 function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, $filter, AuthUserData, $state){
-
+  $log.debug('On Main Controller');
   $scope.waitInit = true;
   $rootScope._dbInitialization
     .then(function(resolve){
@@ -37,10 +37,13 @@ function configLibreriaDemo($stateProvider, $urlRouterProvider, $locationProvide
 
 }
 
-function runLibreriaDemo($log, DbManager, AuthUserData, $rootScope, $q){
+function runLibreriaDemo($log, DbManager, $rootScope, $q){
   $log.debug('Running phase');
   var bootstrappingPromise = $q.defer();
   $rootScope._dbInitialization = bootstrappingPromise.promise;
+  $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+    $state.go('login');
+  });
   DbManager.initDb()
     .then(function(resolve){
       $log.debug('DB initializated!');
@@ -51,5 +54,5 @@ function runLibreriaDemo($log, DbManager, AuthUserData, $rootScope, $q){
 // DI
 angular.module('libreriaDemoApp')
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$logProvider', configLibreriaDemo])
-  .run(['$log', 'DbManager', 'AuthUserData', '$rootScope', '$q', runLibreriaDemo])
+  .run(['$log', 'DbManager', '$rootScope', '$q', runLibreriaDemo])
   .controller('controllerLibreriaDemo',['DbManager', '$log', '$scope', '$rootScope', '$filter', 'AuthUserData', '$state', controllerLibreriaDemo]);

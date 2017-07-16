@@ -59,7 +59,9 @@
             <td>{{::author.name}}</td>
             <td>{{::author.pseudonym}}</td>
             <td>{{::author.id}}</td>
-            <td ng-click="showAuthorBooks(author)"> + </td>
+            <td ng-click="showAuthorBooks(author)">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </td>
           </tr>
           <tr ng-show="authorBooksExpanded[author.id]">
             <td colspan="4">
@@ -71,6 +73,7 @@
                     <th ng-click="setBookOrderBy(author.id, 'basePrice')">Prezzo base</th>
                     <th>Sconto</th>
                     <th></th>
+                    <th></th>
                   </thead>
                   <tbody ng-repeat="book in booksByAuthor(author.id) | orderBy:bookSortField[author.id]:bookSortFieldReverse[author.id+bookSortField[author.id]]">
                     <td>{{book.title}}</td>
@@ -78,7 +81,9 @@
                     <td>{{book.basePrice | currency:"" }}</td>
                     <td>12%</td>
                     <td></td>
-                    <td ng-click="showBookDetail(book)">+</td>
+                    <td ng-click="showBookDetail(book)">
+                      <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                    </td>
                   </tbody>
                 </table>
               </div>
