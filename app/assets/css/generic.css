@@ -33,3 +33,10 @@ span.modal-close > i {
   padding-left: 0px;
   padding-right: 0px;
 }
+
+.page-header {
+  margin-top: 20px !important;
+}
+.page-header > h1 > button {
+  margin-top:20px;
+}

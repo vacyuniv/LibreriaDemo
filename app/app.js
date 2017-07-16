@@ -17,6 +17,7 @@ angular.module('libreriaDemoApp', [
 function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, $filter, AuthUserData, $state){
 
   $scope.waitInit = true;
+  $scope.$state = $state;
 
   // Wait for the db initialization, see runLibreriaDemo function.
   $rootScope._dbInitialization

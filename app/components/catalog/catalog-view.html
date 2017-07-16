@@ -1,7 +1,7 @@
 <div class="row">
 
   <!-- 1: filter based on Books  -->
-  <div class="col-xs-12 col-sm-3 col-md-3">
+  <div class="col-xs-12 col-sm-3 col-md-3 no-horizontal-padding">
     <div class="panel panel-default">
       <div class="panel-heading">
         <span>Filtra per libro</span>
@@ -145,7 +145,7 @@
             <!-- Paginator -->
             <ul class="pagination-sm" uib-pagination boundary-links="true" total-items="catalog.Author.length"
               items-per-page="paginationSchema.maxPageSize"
-              ng-model="paginationSchema.currentPage" ng-change="changePositionPage(paginationSchema.currentPage)"
+              ng-model="paginationSchema.currentPage" ng-change="changePositionPage()"
               previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
             </ul>
           </div>
