@@ -1,5 +1,8 @@
 /** Styles for catalog and tables
 */
+.author-header {
+  background-color: #ddd;
+}
 .bookCellContainer {
   max-height: 150px;
   overflow-y: scroll;

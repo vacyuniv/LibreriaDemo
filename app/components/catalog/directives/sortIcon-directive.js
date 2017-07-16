@@ -1,3 +1,7 @@
+/**
+* Directive to set the arrows-up-down based on orderField and orderArray.
+* Set to "up" when orderArray[orderField] == true, to "down" when orderArray[orderField] or grey out when undefined.
+*/
 function SortIcon(){
 
   return {
@@ -50,6 +54,4 @@ function SortIcon(){
   }
 }
 
-
-angular.module('catalogModule')
-  .directive('sortIcon', SortIcon);
+angular.module('catalogModule').directive('sortIcon', SortIcon);

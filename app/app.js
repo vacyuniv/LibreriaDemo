@@ -1,4 +1,4 @@
-// Module definition for the app, including the submodules
+// --- Module definition for the app -----------------------
 angular.module('libreriaDemoApp', [
   'ngAnimate',
   'ngRoute',
@@ -14,7 +14,7 @@ angular.module('libreriaDemoApp', [
 
 
 // --- App main controller ----------------------
-function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, $filter, AuthUserData, $state){
+function controllerLibreriaDemo(DbManager, $log, $scope, $rootScope, AuthUserData, $state){
   // Expose state for view
   $scope.$state = $state;
 
@@ -45,6 +45,7 @@ function configLibreriaDemo($stateProvider, $urlRouterProvider, $locationProvide
   $urlRouterProvider.otherwise('/login');
 }
 
+// --- Application runtime initialization ----------------
 function runLibreriaDemo($log, DbManager, $rootScope, $q){
   // Hide all until fully initialized
   $rootScope.waitInit = true;
@@ -69,4 +70,4 @@ function runLibreriaDemo($log, DbManager, $rootScope, $q){
 angular.module('libreriaDemoApp')
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$logProvider', configLibreriaDemo])
   .run(['$log', 'DbManager', '$rootScope', '$q', runLibreriaDemo])
-  .controller('controllerLibreriaDemo',['DbManager', '$log', '$scope', '$rootScope', '$filter', 'AuthUserData', '$state', controllerLibreriaDemo]);
+  .controller('controllerLibreriaDemo',['DbManager', '$log', '$scope', '$rootScope', 'AuthUserData', '$state', controllerLibreriaDemo]);

@@ -5,7 +5,7 @@ angular.module('bookModule', [
 ]);
 
 // Controller definition
-function BookController($scope, $rootScope, $filter, $log, AuthUserData, $state, BookActions, $uibModalInstance, bookId) {
+function BookController($scope, $rootScope, $log, AuthUserData, $state, BookActions, $uibModalInstance, bookId) {
 
   // GTFO when not logged
   if ( !AuthUserData.hasSession() ){
@@ -27,9 +27,7 @@ function BookController($scope, $rootScope, $filter, $log, AuthUserData, $state,
       });
   }
 
-  // --- Classic modal actions ---
-
 }
 
 angular.module('bookModule')
-  .controller('bookController', ['$scope', '$rootScope', '$filter', '$log', 'AuthUserData', '$state', 'BookActions', '$uibModalInstance', 'bookId', BookController]);
+  .controller('bookController', ['$scope', '$rootScope', '$log', 'AuthUserData', '$state', 'BookActions', '$uibModalInstance', 'bookId', BookController]);

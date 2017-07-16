@@ -20,7 +20,6 @@ function BookActions($log, DbManager, $uibModal, $q){
     });
   };
 
-
   /**
   * Query the DB to get the book detail, given its ID
   */
@@ -42,8 +41,6 @@ function BookActions($log, DbManager, $uibModal, $q){
       });
     return defer.promise;
   };
-
-
 }
 
 angular.module('bookModule').service('BookActions', BookActions);

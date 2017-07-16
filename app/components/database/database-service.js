@@ -1,8 +1,7 @@
 // Module declaration
 angular.module('databaseManager', []);
 
-
-// Service
+// --- DataBase Service -------------------------
 function DbManager($log, MOCK_DB){
 
   // DB Reference
@@ -15,26 +14,26 @@ function DbManager($log, MOCK_DB){
 
   /**
   * DB Creation and population. As of now this is mocked, with time get those from a
-  * webservice and inject as js objects.
+  * webservice and inject as json/js objects.
   */
   this.initDb = function(){
     console.log('Initializing schema for DB');
     var schemaBuilder = lf.schema.create('libreriaDemo', 1);
 
-    // Schema declaration of the 3 tables:
+    // Schema declaration of the 3 tables: load from YAML file generated from backend on real apps
     // --- User Table ----
     schemaBuilder.createTable('User')
       .addColumn('id', lf.Type.INTEGER)
       .addColumn('username', lf.Type.STRING)
       .addColumn('password', lf.Type.STRING)
-      .addPrimaryKey(['id'], true) // true means its autoincremental
+      .addPrimaryKey(['id'], true) // true means its autoincremental, not really used though
       .addIndex('idxUsername', ['username'], false, lf.Order.DESC);
     // --- Author Table ----
     schemaBuilder.createTable('Author')
       .addColumn('id', lf.Type.INTEGER)
       .addColumn('name', lf.Type.STRING)
       .addColumn('pseudonym', lf.Type.STRING)
-      .addPrimaryKey(['id'], true); // true means its autoincremental
+      .addPrimaryKey(['id'], true); // true means its autoincremental, not really used though
     // --- Book Table ----
     schemaBuilder.createTable('Book')
       .addColumn('isbn', lf.Type.STRING)
@@ -52,7 +51,7 @@ function DbManager($log, MOCK_DB){
       })
       .addPrimaryKey(['isbn']);
 
-    // ---- Connection to DB and populate the tables -------
+    // ---- Connect to DB and populate the tables -------
     return schemaBuilder.connect().then(function(db){
 
       console.log('Populating DB');
@@ -125,8 +124,8 @@ function DbManager($log, MOCK_DB){
   }
 
   /**
-  * Retrieve the book from DB given its id
-  * @return a list of authors
+  * Retrieve the book from DB given its id.
+  * @return the book with its author for further manipolation.
   */
   this.getBook = function(bookId){
     var db          = dbReferences.db;
@@ -188,5 +187,4 @@ function DbManager($log, MOCK_DB){
 
 }
 
-angular.module('databaseManager')
-  .service('DbManager', DbManager );
+angular.module('databaseManager').service('DbManager', DbManager );

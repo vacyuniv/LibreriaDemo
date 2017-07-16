@@ -79,7 +79,7 @@
             <div class="alert alert-info" role="alert" ng-show="catalog.Author.length == 0">Nessun record trovato!</div>
             <!-- Actual table containing the catalog -->
             <table class="table table-hover table-bordered" ng-if="!waitCatalog" ng-show="catalog.Author.length > 0">
-              <thead>
+              <thead class="author-header">
                 <th ng-click="setAuthorOrderBy('name')">
                   <span>Autore</span>
                   <sort-icon order-array="{{authorSortFieldReverse}}" order-field="name" />
@@ -156,7 +156,5 @@
     </div>
 
   </div>
-
-
 
 </div>

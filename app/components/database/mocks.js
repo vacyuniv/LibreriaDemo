@@ -141,11 +141,6 @@ var mockedEntries = {
       'authorId': 5
     }
   ]
-
-
-
-
-
 };
 
 angular.module('databaseManager').constant('MOCK_DB', mockedEntries);

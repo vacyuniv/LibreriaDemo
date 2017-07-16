@@ -23,12 +23,11 @@ function CatalogConfig($stateProvider){
         return $rootScope._dbInitialization;
       }
     }
-
   });
 }
 
 // Controller definition
-function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $state, CatalogService, BookActions) {
+function CatalogController($scope, $rootScope, $log, AuthUserData, $state, CatalogService, BookActions) {
 
   // GTFO when not logged
   if ( !AuthUserData.hasSession() ){
@@ -78,8 +77,6 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
   $scope.booksByAuthor = function(authorId){
     return _.where($scope.catalog.Book, {'authorId': authorId});
   };
-
-  // Watch over $scope.catalog.Author changes to easily get the correct length
 
   // --- Expand/collapse utilities --------------------------------------------------------
   $scope.authorBooksExpanded = [];
@@ -134,7 +131,7 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
   }
   $scope.changePositionPage = function(){
     if ($scope.catalog.Author && $scope.catalog.Author.length > 0) {
-      $scope.paginationSchema.indexFirstElementForPage = ($scope.paginationSchema.currentPage - 1) * $scope.paginationSchema.maxPageSize + 1;
+      $scope.paginationSchema.indexFirstElementForPage = ($scope.paginationSchema.currentPage - 1) * $scope.paginationSchema.maxPageSize;
     }
   }
   $scope.goToLastPage = function(){
@@ -155,4 +152,4 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
 
 angular.module('catalogModule')
   .config(['$stateProvider', CatalogConfig])
-  .controller('catalogController', ['$scope', '$rootScope', '$filter', '$log', 'AuthUserData', '$state', 'CatalogService', 'BookActions', CatalogController]);
+  .controller('catalogController', ['$scope', '$rootScope', '$log', 'AuthUserData', '$state', 'CatalogService', 'BookActions', CatalogController]);
