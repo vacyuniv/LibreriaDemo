@@ -35,9 +35,9 @@ function CatalogController($scope, $rootScope, $filter, $log, AuthUserData, $sta
     $state.go('login');
   }
 
-  $log.debug('On Catalog controller');
   $scope.totalAuthors = 0;
   $scope.currentPage  = 1;
+  $scope.itemPerPage  = 3;
 
   // --- Book Filter ----------------------------------------
   $scope.bookFilter = {}

@@ -3,7 +3,7 @@ angular.module('databaseManager', []);
 
 
 // Service
-function DbManager($log){
+function DbManager($log, MOCK_DB){
 
   // DB Reference
   dbReferences = {}
@@ -58,89 +58,36 @@ function DbManager($log){
       console.log('Populating DB');
 
       // Add references for queries
-      dbReferences.db           = db;
+      dbReferences.db          = db;
       dbReferences.userTable   = db.getSchema().table('User');
       dbReferences.authorTable = db.getSchema().table('Author');
       dbReferences.bookTable   = db.getSchema().table('Book');
 
       // --- Populate User table ----------------------------
       var populateUsers = function pupulateUsers(){
-        var row1 = dbReferences.userTable.createRow({
-          'id': 1,
-          'username': 'try',
-          'password':'me'
-        });
-        var row2 = dbReferences.userTable.createRow({
-          'id': 2,
-          'username': 'try2',
-          'password':'me2'
-        });
-        var userRows = [row1, row2];
+        var userRows = [];
+        var n = MOCK_DB.USER_TABLE.length;
+        for (var i = 0; i < n; i++){
+          userRows.push(dbReferences.userTable.createRow(MOCK_DB.USER_TABLE[i]));
+        }
         return db.insertOrReplace().into(dbReferences.userTable).values(userRows).exec();
       }
       // --- Populate Author table ----------------------------
       var populateAuthors = function(){
-        var row1 = dbReferences.authorTable.createRow({
-          'id': 1,
-          'name': 'Isaac Asimov',
-          'pseudonym': 'Isaac Asimov'
-        });
-        var row2 = dbReferences.authorTable.createRow({
-          'id': 2,
-          'name': 'Robert A. Heinlein',
-          'pseudonym': 'Robert A. Heinlein'
-        });
-        var row3 = dbReferences.authorTable.createRow({
-          'id': 3,
-          'name': 'Arthur C. Clarke',
-          'pseudonym': 'Arthur C. Clarke'
-        });
-        var row4 = dbReferences.authorTable.createRow({
-          'id': 4,
-          'name': 'Poul Anderson',
-          'pseudonym': 'Poul Anderson'
-        });
-        var authorRows = [ row1, row2, row3, row4];
-
+        var authorRows = [];
+        var n = MOCK_DB.AUTHOR_TABLE.length;
+        for (var i = 0; i < n; i++){
+          authorRows.push(dbReferences.authorTable.createRow(MOCK_DB.AUTHOR_TABLE[i]));
+        }
         return db.insertOrReplace().into(dbReferences.authorTable).values(authorRows).exec();
       }
       // --- Populate Book table ----------------------------
       var populateBooks = function(){
-        var row1 = dbReferences.bookTable.createRow({
-          'isbn': '8804519525',
-          'title': 'Io, robot',
-          'description': 'A lei, un robot è solo un robot. Ma lei non ha lavorato con loro. Lei non li conosce. Loro sono degli addetti alle pulizie, i migliori che abbiamo. Quando la Terra è dominata da un padrone-macchina... quando i robot sono più umani dell\'umanità. La visione indimenticabile, agghiacciante del futuro, da parte di Isaac Asimov - disponibile finalmente nella sua prima edizione in brossura.',
-          'imageUrl': 'https://images-na.ssl-images-amazon.com/images/I/41WFM04FSxL._SY344_BO1,204,203,200_.jpg',
-          'editor': 'Mondadori',
-          'year': 2003,
-          'basePrice': 9.90,
-          'baseDiscount': 10,
-          'authorId': 1
-        });
-        var row2 = dbReferences.bookTable.createRow({
-          'isbn': '88-520-3675-X',
-          'title': 'Le fontane del Paradiso',
-          'description': 'Bellissimo',
-          'imageUrl': 'http://www.bibliotecagalattica.com/romanzi/immaginiromanzi/fontane_del_paradiso.jpg',
-          'editor': 'Mondadori',
-          'year': 1979,
-          'basePrice': 8.90,
-          'baseDiscount': 12,
-          'authorId': 3
-        });
-        var row3 = dbReferences.bookTable.createRow({
-          'isbn': '88-04-40304-7',
-          'title': 'Abissi di acciaio',
-          'description': 'Metropoli e indagini',
-          'imageUrl': 'https://images-na.ssl-images-amazon.com/images/I/71LJTc5gfYL.jpg',
-          'editor': 'Mondadori',
-          'year': 1995,
-          'basePrice': 12.90,
-          'baseDiscount': 20,
-          'authorId': 1
-        });
-        var bookRows = [ row1, row2, row3 ];
-
+        var bookRows = []
+        var n = MOCK_DB.BOOK_TABLE.length;
+        for (var i = 0; i < n; i++){
+          bookRows.push(dbReferences.bookTable.createRow(MOCK_DB.BOOK_TABLE[i]));
+        }
         return db.insertOrReplace().into(dbReferences.bookTable).values(bookRows).exec();
       }
       //var populateBooks = new Promise();
